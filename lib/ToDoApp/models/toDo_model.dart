@@ -1,11 +1,15 @@
 class ToDoModel{
-  final String title;
-  final String date;
-  final String time;
+   String ?title;
+   String ?description;
+   String ?startDate;
+   String ?lastDate;
 
- const ToDoModel({
-   required this.title,
-   required  this.date,
-   required this.time
+
+  ToDoModel( {
+    required this.title,
+   required this.description,
+   required this.startDate,
+   required this.lastDate,
+
 });
 }

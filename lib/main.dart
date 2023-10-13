@@ -1,8 +1,10 @@
 
 
+import 'package:eraasoft_first_project/ToDoApp/cubits/toDo_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'ToDoApp/screens/toDoHome_screen.dart';
+import 'ToDoApp/screens/todo_splash_screen.dart';
 import 'bottom_navigation_bar/bottom_navigation_screen.dart';
 import 'first_task/first_screen.dart';
 import 'first_task/fourth_screen.dart';
@@ -21,9 +23,14 @@ class FirstProject extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  const MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home:  ToDoHomeScreen(),
+    return  MultiBlocProvider(
+      providers: [
+        BlocProvider(create:(context)=> TodoCubit())
+      ],
+      child: const MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home:  ToDoSplashScreen(),
+      ),
     );
   }
 }
