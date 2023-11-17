@@ -7,6 +7,9 @@ class TextFormFieldCustom extends StatelessWidget {
   final TextInputType? keyboardType;
   final TextInputAction? textInputAction;
   final IconData ?icon;
+  final String? Function(String?)? validator;
+  final AutovalidateMode? autovalidateMode;
+  final bool obscureText ;
   const TextFormFieldCustom({
     Key? key,
     this.onTap,
@@ -15,18 +18,18 @@ class TextFormFieldCustom extends StatelessWidget {
     this.keyboardType,
     this.textInputAction=TextInputAction.next,
     this.icon,
+    this.validator,
+    this.autovalidateMode,
+    this.obscureText=false,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller,
-      validator: (value){
-        if(value!.isEmpty){
-          return 'Field must not be empty';
-        }
-        return null;
-      },
+      validator: validator,
+      obscureText:obscureText ,
+      autovalidateMode: autovalidateMode,
       style: const TextStyle(color: Colors.amber),
       keyboardType: keyboardType,
       textInputAction: textInputAction,

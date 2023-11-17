@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-import '../models/toDo_model.dart';
+import '../../models/todo_model.dart';
 import '../screens/edit_task_screen.dart';
 
 class TasksItemBuilder extends StatelessWidget {
-  final ToDoModel toDoModel;
+  final Tasks tasks;
   final void Function() onTap;
-  const TasksItemBuilder({Key? key, required this.toDoModel, required this.onTap}) : super(key: key);
+  const TasksItemBuilder({Key? key, required this.onTap, required this.tasks, }) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -21,13 +21,12 @@ class TasksItemBuilder extends StatelessWidget {
           )
         ),
         padding: const EdgeInsets.only(top: 8,left: 8),
-        height: 100,
         width: 200,
         child:  Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              toDoModel.title??'',
+             tasks.title??'',
               style: const TextStyle(
                 color: Colors.amber,
                 fontSize: 18
@@ -35,7 +34,7 @@ class TasksItemBuilder extends StatelessWidget {
             ),
             const SizedBox(height: 5,),
             Text(
-              toDoModel.description??'',
+              tasks.description??'',
               style: const TextStyle(
                   color: Colors.amber,
                   fontSize: 18
@@ -43,18 +42,23 @@ class TasksItemBuilder extends StatelessWidget {
             ),
             const SizedBox(height: 5,),
             Text(
-              toDoModel.startDate??'',
+              tasks.startDate??'',
               style: const TextStyle(
                   color: Colors.grey,
               ),
             ),
             const SizedBox(height: 5,),
             Text(
-              toDoModel.lastDate??'',
+              tasks.endDate??'',
               style: const TextStyle(
                   color: Colors.grey,
               ),
             ),
+            const SizedBox(height: 5,),
+            Visibility(
+              visible: (tasks.image??'').isNotEmpty,
+                child: Image.network(tasks.image??'')),
+
           ],
         ),
       ),

@@ -1,8 +1,13 @@
+import 'dart:io';
+
+import 'package:eraasoft_first_project/ToDoApp/view/componets/textFormField_custom.dart';
+import 'package:eraasoft_first_project/ToDoApp/view_model/cubits/todo_cubit/todo_states.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../componets/elevated_button_custom.dart';
-import '../componets/textFormField_custom.dart';
-import '../cubits/toDo_cubit.dart';
+
+import '../../view_model/cubits/todo_cubit/todo_cubit.dart';
 
 class EditTaskScreen extends StatelessWidget {
   final int index;
@@ -35,6 +40,7 @@ class EditTaskScreen extends StatelessWidget {
               children:[
                 Expanded(
                   child: SingleChildScrollView(
+                    physics: const BouncingScrollPhysics(),
                     child: Column(
                       children: [
                         TextFormFieldCustom(
@@ -95,32 +101,90 @@ class EditTaskScreen extends StatelessWidget {
                           controller: cubit.lastDateController,
                         ),
                         const SizedBox(
+                          height: 20,
+                        ),
+                        BlocBuilder<TodoCubit, TodoState>(
+                          builder: (context, state) {
+                            TodoCubit cubit =TodoCubit.get(context);
+                            return InkWell(
+                              onTap: (){
+                                cubit.takePhotoFromUser();
+                              },
+                              borderRadius: BorderRadius.circular(15),
+                              child: Container(
+                                padding: const EdgeInsets.all(10),
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(15),
+                                    border: Border.all(
+                                        color: Colors.grey
+                                    )
+                                ),
+                                child: Visibility(
+                                  visible: cubit.image==null,
+                                  replacement: Image.file(File(cubit.image?.path??'')),
+                                  child:  Column(
+                                    children: [
+                                      if((cubit.tasksModel?.data?.tasks?[cubit.currentIndex].image??'').isNotEmpty)
+                                      Image.network(cubit.tasksModel?.data?.tasks?[cubit.currentIndex].image??''),
+                                      if((cubit.tasksModel?.data?.tasks?[cubit.currentIndex].image??'').isEmpty)...[
+                                        const Icon(
+                                          Icons.image,
+                                          size: 200,
+                                          color: Colors.amber,
+                                        ),
+                                        const Text(
+                                          'add a photo',
+                                          style: TextStyle(
+                                              color: Colors.amber,
+                                              fontSize: 30
+                                          ),
+                                        )
+                                      ]
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                         const SizedBox(
                           height: 15,
                         ),
                       ],
                     ),
                   ),
                 ),
-                ElevatedButtonCustom(
-                  onPressed: () { 
-                    if(cubit.formKey.currentState!.validate()){
-                      cubit.editTask(index: index).then((value) => {
-                        Navigator.pop(context)
-                      });
-                    }
-                  },
-                  text: 'Edit the Task',
-                ),
-                ElevatedButtonCustom(
-                  onPressed: () {
-                    if(cubit.formKey.currentState!.validate()){
-                      cubit.deleteTask(index: index).then((value) => {
-                        Navigator.pop(context)
-                      });
-                    }
-                  },
-                  text: 'Delete the Task',
-                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButtonCustom(
+                        onPressed: () {
+                          if(cubit.formKey.currentState!.validate()){
+                            cubit.updateTask().then((value) => {
+                              Navigator.pop(context)
+                            });
+                          }
+                        },
+                        text: 'Edit the Task',
+                      ),
+                    ),
+                    const SizedBox(width: 10,),
+                    Expanded(
+                      child: ElevatedButtonCustom(
+                        onPressed: () {
+                          if(cubit.formKey.currentState!.validate()){
+                            cubit.delete().then((value) => {
+                              Navigator.pop(context)
+                            });
+                          }
+                        },
+                        text: 'Delete the Task',
+                      ),
+                    ),
+                  ],
+                )
+
               ]
           ),
         ),
