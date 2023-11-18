@@ -6,6 +6,7 @@ import 'package:eraasoft_first_project/ToDoApp/view_model/data/loacl/shared_pref
 import 'package:flutter/material.dart';
 
 import 'register_screen.dart';
+import 'show_statistics_screen.dart';
 
 
 class ToDoSplashScreen extends StatelessWidget {
@@ -16,7 +17,7 @@ class ToDoSplashScreen extends StatelessWidget {
     return AnimatedSplashScreen(
         duration: 2000,
         splash: ('assets/images/todo.jpg'),
-        nextScreen: LocalData.get(key:SharedKeys.token)!=null?const TasksScreen():const LoginScreen(),
+        nextScreen: LocalData.get(key:SharedKeys.token)!=null?const ShowStatisticsScreen():const LoginScreen(),
         splashIconSize: 200,
         splashTransition: SplashTransition.fadeTransition,
         backgroundColor: Colors.black,

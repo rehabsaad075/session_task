@@ -31,4 +31,7 @@ class DeleteTaskLoadingState extends TodoState{}
 class DeleteTaskSuccessState extends TodoState{}
 class DeleteTaskErrorState extends TodoState{}
 
+class ShowStatisticsLoadingState extends TodoState{}
+class ShowStatisticsSuccessState extends TodoState{}
+class ShowStatisticsErrorState extends TodoState{}
 

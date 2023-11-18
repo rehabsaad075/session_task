@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:eraasoft_first_project/ToDoApp/models/statistics_model.dart';
 import 'package:eraasoft_first_project/ToDoApp/view_model/data/loacl/shared_keys.dart';
 import 'package:eraasoft_first_project/ToDoApp/view_model/data/loacl/shared_preferences.dart';
 import 'package:eraasoft_first_project/ToDoApp/view_model/data/network/diohelper.dart';
@@ -112,9 +113,8 @@ class TodoCubit extends Cubit<TodoState> {
     ).then((value) {
       print(value.data);
       emit(StoreNewTaskSuccessState());
-      getAllTasks();
       removeTask();
-      //image=null;
+      getAllTasks();
     }).catchError((error){
       if(error is DioException){
         print(error.response?.data);
@@ -180,6 +180,26 @@ class TodoCubit extends Cubit<TodoState> {
       }
       emit(DeleteTaskErrorState());
       throw error;
+    });
+  }
+
+  StatisticsModel? statisticsModel;
+  int total=0;
+  Future<void>showStatistics()async {
+    emit(ShowStatisticsLoadingState());
+    await DioHelper.get(
+        endPoint: "${EndPoints.tasks}-${EndPoints.statistics}",
+        token: LocalData.get(key: SharedKeys.token),
+    ).then((value) {
+      print(value.data);
+      statisticsModel=StatisticsModel.fromJson(value.data);
+      total= (statisticsModel?.data?.newTask??0)+(statisticsModel?.data?.outdated??0)+(statisticsModel?.data?.doing??0)+(statisticsModel?.data?.completed??0);
+      emit(ShowStatisticsSuccessState());
+    }).catchError((error){
+      if(error is DioException){
+        print(error.response?.data);
+      }
+      emit(ShowStatisticsErrorState());
     });
   }
 }

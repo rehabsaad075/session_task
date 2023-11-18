@@ -5,7 +5,12 @@ import '../screens/addNewTask_screen.dart';
 class ElevatedButtonCustom extends StatelessWidget {
   final void Function() onPressed;
   final String text;
-  const ElevatedButtonCustom({Key? key,required this.onPressed, required this.text}) : super(key: key);
+  final double ?width;
+  const ElevatedButtonCustom({
+    Key? key,required this.onPressed,
+    required this.text,
+    this.width=250
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +18,7 @@ class ElevatedButtonCustom extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 15),
       child: SizedBox(
         height: 50,
-        width: 250,
+        width: width,
         child: ElevatedButton(
             onPressed:onPressed,
             style: ElevatedButton.styleFrom(

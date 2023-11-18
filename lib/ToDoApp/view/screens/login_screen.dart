@@ -6,6 +6,8 @@ import 'package:eraasoft_first_project/ToDoApp/view_model/cubits/Auth_cubit/auth
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'show_statistics_screen.dart';
+
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
 
@@ -79,7 +81,7 @@ class LoginScreen extends StatelessWidget {
                           authCubit.login().then((value) =>
                               Navigator.push(context,
                                   MaterialPageRoute(
-                                      builder: (context)=>const TasksScreen())
+                                      builder: (context)=>const ShowStatisticsScreen())
                               )
                           );
                         }

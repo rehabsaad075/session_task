@@ -149,6 +149,7 @@ class AddNewTaskScreen extends StatelessWidget {
                     onPressed: () {
                       if (cubit.formKey.currentState!.validate()){
                         cubit.storeNewTask().then((value) => {
+                        //cubit.removeTask(),
                           Navigator.pop(context)
                         });
                       }
