@@ -9,6 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
 
+import '../../utils/functions.dart';
+
 part 'auth_state.dart';
 
 class AuthCubit extends Cubit<AuthState> {
@@ -36,6 +38,7 @@ class AuthCubit extends Cubit<AuthState> {
    ).then((value) {
      print(value.data);
      emit(RegisterSuccessState());
+     showToast(msg: 'register successfully');
    }).catchError((error){
      if(error is DioException){
        print(error.response?.data);
@@ -57,6 +60,7 @@ class AuthCubit extends Cubit<AuthState> {
       print(value.data);
       LocalData.set(key:SharedKeys.token,value:value.data['data']['token']);
       emit(LoginSuccessState());
+      showToast(msg: 'Login successfully');
     }).catchError((error){
       if(error is DioException){
         print(error.response?.data);

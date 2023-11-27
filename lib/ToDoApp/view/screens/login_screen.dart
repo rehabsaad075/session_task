@@ -1,7 +1,6 @@
 import 'package:eraasoft_first_project/ToDoApp/view/componets/elevated_button_custom.dart';
 import 'package:eraasoft_first_project/ToDoApp/view/componets/textFormField_custom.dart';
 import 'package:eraasoft_first_project/ToDoApp/view/screens/register_screen.dart';
-import 'package:eraasoft_first_project/ToDoApp/view/screens/tasks_screen.dart';
 import 'package:eraasoft_first_project/ToDoApp/view_model/cubits/Auth_cubit/auth_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

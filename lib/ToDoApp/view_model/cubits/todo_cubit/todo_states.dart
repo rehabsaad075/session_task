@@ -11,7 +11,6 @@ class EditTaskState extends TodoState{}
 
 class GetAllTasksLoadingState extends TodoState{}
 class GetAllTasksSuccessState extends TodoState{}
-
 class GetAllTasksErrorState extends TodoState{}
 
 class StoreNewTaskLoadingState extends TodoState{}
@@ -35,3 +34,6 @@ class ShowStatisticsLoadingState extends TodoState{}
 class ShowStatisticsSuccessState extends TodoState{}
 class ShowStatisticsErrorState extends TodoState{}
 
+class GetMoreTasksLoadingState extends TodoState{}
+class GetMoreTasksSuccessState extends TodoState{}
+class GetMoreTasksErrorState extends TodoState{}

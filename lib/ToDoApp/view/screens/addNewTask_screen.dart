@@ -4,6 +4,7 @@ import 'package:eraasoft_first_project/ToDoApp/view_model/cubits/todo_cubit/todo
 
 import 'package:eraasoft_first_project/ToDoApp/view/componets/textFormField_custom.dart';
 import 'package:eraasoft_first_project/ToDoApp/view_model/cubits/todo_cubit/todo_states.dart';
+import 'package:eraasoft_first_project/ToDoApp/view_model/utils/functions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -149,6 +150,7 @@ class AddNewTaskScreen extends StatelessWidget {
                     onPressed: () {
                       if (cubit.formKey.currentState!.validate()){
                         cubit.storeNewTask().then((value) => {
+                          showToast(msg: 'Added successfully'),
                         //cubit.removeTask(),
                           Navigator.pop(context)
                         });

@@ -84,6 +84,10 @@ class TodoCubit extends Cubit<TodoState> {
     ).then((value) {
       print(value.data);
       tasksModel =TasksModel.fromJson(value.data);
+      if(tasksModel?.data?.meta?.currentPage==tasksModel?.data?.meta?.lastPage)
+      {
+        hasMoreTasks=false;
+      }
       emit(GetAllTasksSuccessState());
     }).catchError((error){
       if(error is DioException){
@@ -200,6 +204,55 @@ class TodoCubit extends Cubit<TodoState> {
         print(error.response?.data);
       }
       emit(ShowStatisticsErrorState());
+    });
+  }
+
+  ScrollController scrollController=ScrollController();
+  void initController(){
+    scrollController=ScrollController();
+  }
+  void disposeController(){
+    scrollController.dispose();
+  }
+  void scrollerListener(){
+    scrollController.addListener(() {
+      if(scrollController.position.atEdge ){
+        if(scrollController.position !=0 && !isLoadingTasks && hasMoreTasks){
+          print('you are Bottom');
+          getMoreTasks();
+        }
+      }
+    });
+  }
+  bool hasMoreTasks=true;
+  bool isLoadingTasks=false;
+
+  Future<void>getMoreTasks()async {
+    isLoadingTasks=true;
+    emit(GetMoreTasksLoadingState());
+    await DioHelper.get(
+      endPoint: EndPoints.tasks,
+      token: LocalData.get(key:SharedKeys.token,),
+      parameters: {
+        'page': (tasksModel?.data?.meta?.currentPage??0)+1
+      }
+    ).then((value) {
+     isLoadingTasks=false;
+      TasksModel newTasksModel =TasksModel.fromJson(value.data);
+      tasksModel?.data?.meta=newTasksModel.data?.meta;
+      tasksModel?.data?.tasks?.addAll(newTasksModel.data?.tasks??[]);
+      if(tasksModel?.data?.meta?.currentPage==tasksModel?.data?.meta?.lastPage)
+      {
+        hasMoreTasks=false;
+      }
+      emit(GetMoreTasksSuccessState());
+    }).catchError((error){
+      print(error);
+      isLoadingTasks=false;
+      if(error is DioException){
+        print(error.response?.data);
+      }
+      emit(GetMoreTasksErrorState());
     });
   }
 }

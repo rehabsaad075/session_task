@@ -5,6 +5,7 @@ import 'package:eraasoft_first_project/ToDoApp/view_model/cubits/todo_cubit/todo
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../view_model/utils/functions.dart';
 import '../componets/elevated_button_custom.dart';
 
 import '../../view_model/cubits/todo_cubit/todo_cubit.dart';
@@ -162,6 +163,7 @@ class EditTaskScreen extends StatelessWidget {
                         onPressed: () {
                           if(cubit.formKey.currentState!.validate()){
                             cubit.updateTask().then((value) => {
+                              showToast(msg: 'updated successfully'),
                               Navigator.pop(context)
                             });
                           }
@@ -175,6 +177,7 @@ class EditTaskScreen extends StatelessWidget {
                         onPressed: () {
                           if(cubit.formKey.currentState!.validate()){
                             cubit.delete().then((value) => {
+                              showToast(msg: 'deleted successfully'),
                               Navigator.pop(context)
                             });
                           }

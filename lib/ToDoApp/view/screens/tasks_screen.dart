@@ -14,7 +14,7 @@ class TasksScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider.value(
-      value: TodoCubit.get(context)..getAllTasks(),
+      value: TodoCubit.get(context)..getAllTasks()..initController()..scrollerListener(),
       child: Scaffold(
         backgroundColor: Colors.black,
         appBar: AppBar(
@@ -32,35 +32,57 @@ class TasksScreen extends StatelessWidget {
         body: BlocBuilder<TodoCubit, TodoState>(
           builder: (context, state) {
             TodoCubit cubit = TodoCubit.get(context);
-            return Visibility(
-              visible: cubit.tasksModel?.data?.tasks?.isNotEmpty??true,
-              replacement: const Center(
-                child: Text(
-                  'No Tasks Yet, Please Add Some Tasks',
-                  style: TextStyle(
-                      color: Colors.amber,
-                      fontSize: 20
+            return Column(
+              children: [
+                Expanded(
+                  child: Visibility(
+                    visible: cubit.tasksModel?.data?.tasks?.isNotEmpty??true,
+                    replacement: const Center(
+                      child: Text(
+                        'No Tasks Yet, Please Add Some Tasks',
+                        style: TextStyle(
+                            color: Colors.amber,
+                            fontSize: 20
+                        ),
+                      ),
+                    ),
+                    child: ListView.separated(
+                      controller: cubit.scrollController,
+                      physics: const BouncingScrollPhysics(),
+                        itemBuilder: (context, index) =>
+                            TasksItemBuilder(
+                              tasks: cubit.tasksModel?.data?.tasks?[index]??Tasks(),
+                              onTap: () {
+                                cubit.changeIndex(index);
+                                Navigator.push(context,
+                                    MaterialPageRoute(builder: (context) =>
+                                        EditTaskScreen(index: index,)
+                                    )
+                                );
+                              },
+                            ),
+                        separatorBuilder: (context, index) =>
+                        const SizedBox(height: 15,),
+                        itemCount: cubit.tasksModel?.data?.tasks?.length??0
+                    ),
                   ),
                 ),
-              ),
-              child: ListView.separated(
-                physics: const BouncingScrollPhysics(),
-                  itemBuilder: (context, index) =>
-                      TasksItemBuilder(
-                        tasks: cubit.tasksModel?.data?.tasks?[index]??Tasks(),
-                        onTap: () {
-                          cubit.changeIndex(index);
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (context) =>
-                                  EditTaskScreen(index: index,)
-                              )
-                          );
-                        },
-                      ),
-                  separatorBuilder: (context, index) =>
-                  const SizedBox(height: 15,),
-                  itemCount: cubit.tasksModel?.data?.tasks?.length??0
-              ),
+                if(cubit.isLoadingTasks)
+                const Padding(
+                  padding: EdgeInsets.all(12.0),
+                  child: CircularProgressIndicator(
+                    color: Colors.amber,
+                  ),
+                ),
+                if(!cubit.hasMoreTasks)
+                  const Text(
+                      'No more Tasks',
+                    style: TextStyle(
+                      color: Colors.amber,
+                    ),
+                  ),
+
+              ],
             );
           },
         ),
