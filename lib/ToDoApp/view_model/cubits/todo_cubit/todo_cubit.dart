@@ -1,5 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
 import 'package:eraasoft_first_project/ToDoApp/models/statistics_model.dart';
+import 'package:eraasoft_first_project/ToDoApp/models/todo_fire_model.dart';
+import 'package:eraasoft_first_project/ToDoApp/view_model/data/firebase/firebaseKeys.dart';
 import 'package:eraasoft_first_project/ToDoApp/view_model/data/loacl/shared_keys.dart';
 import 'package:eraasoft_first_project/ToDoApp/view_model/data/loacl/shared_preferences.dart';
 import 'package:eraasoft_first_project/ToDoApp/view_model/data/network/diohelper.dart';
@@ -253,6 +256,43 @@ class TodoCubit extends Cubit<TodoState> {
         print(error.response?.data);
       }
       emit(GetMoreTasksErrorState());
+    });
+  }
+
+  Future<void>addTaskWithFireStore()async {
+    emit(StoreNewTaskLoadingState());
+    await FirebaseFirestore.instance.collection(FirebaseKeys.tasks).
+    add({
+      "title":titleController.text,
+      "description":descriptionController.text,
+      "start_date":startDateController.text,
+      "end_date":lastDateController.text,
+      // if(image != null)
+      //   "image":await MultipartFile.fromFile(image!.path),
+      "status":"new",
+      "userId":LocalData.get(key: SharedKeys.uid)
+    }).then((value) {
+      emit(StoreNewTaskSuccessState());
+    }).catchError((error){
+      emit(ShowStatisticsErrorState());
+      throw error;
+    });
+  }
+
+  List<TodoFireModel>tasksFireList=[];
+  Future<void>getAllTasksFromFireStore()async{
+    emit(GetAllTasksLoadingState());
+    await FirebaseFirestore.instance.collection(FirebaseKeys.tasks)
+        .where('userId',isEqualTo: LocalData.get(key: SharedKeys.uid))
+        .get()
+        .then((value) {
+          tasksFireList=[];
+          for(var i in value.docs){
+            tasksFireList.add(TodoFireModel.fromFireStore(i.data(),id: i.id));
+          }
+          emit(GetAllTasksSuccessState());
+    }).catchError((error){
+      emit(GetAllTasksErrorState());
     });
   }
 }

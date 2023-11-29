@@ -76,6 +76,7 @@ class RegisterScreen extends StatelessWidget {
                     const SizedBox(height: 15,),
                      TextFormFieldCustom(
                       labelText: 'Password',
+                      obscureText: true,
                       icon: Icons.visibility,
                        controller: authCubit.passwordController,
                        validator: (value){
@@ -88,6 +89,7 @@ class RegisterScreen extends StatelessWidget {
                     const SizedBox(height: 15,),
                      TextFormFieldCustom(
                       labelText: 'Password confirmation',
+                      obscureText: true,
                       icon: Icons.visibility,
                        controller: authCubit.passwordConfirmationController,
                        autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -104,7 +106,10 @@ class RegisterScreen extends StatelessWidget {
                     ElevatedButtonCustom(
                       onPressed: () {
                         if(authCubit.formKey.currentState!.validate()){
-                          authCubit.register().then((value) => Navigator.pop(context));
+                          //register with firebase
+                          authCubit.registerWithFirebase().then((value) => Navigator.pop(context));
+                          // register with api
+                         // authCubit.register().then((value) => Navigator.pop(context));
                         }
                       },
                       text: 'Register',

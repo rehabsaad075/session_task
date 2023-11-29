@@ -12,3 +12,12 @@ class RegisterErrorState extends AuthState {}
 class LoginLoadingState extends AuthState {}
 class LoginSuccessState extends AuthState {}
 class LoginErrorState extends AuthState {}
+
+
+class RegisterWithFirebaseLoadingState extends AuthState{}
+class RegisterWithFirebaseSuccessState extends AuthState{}
+class RegisterWithFirebaseErrorState extends AuthState{}
+
+class LoginWithFirebaseLoadingState extends AuthState{}
+class LoginWithFirebaseSuccessState extends AuthState{}
+class LoginWithFirebaseErrorState extends AuthState{}

@@ -3,12 +3,14 @@
 import 'package:eraasoft_first_project/ToDoApp/view_model/cubits/todo_cubit/todo_cubit.dart';
 import 'package:eraasoft_first_project/ToDoApp/view_model/data/loacl/shared_preferences.dart';
 import 'package:eraasoft_first_project/ToDoApp/view_model/data/network/diohelper.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'ToDoApp/view/screens/show_statistics_screen.dart';
 import 'ToDoApp/view/screens/todo_splash_screen.dart';
 import 'ToDoApp/view_model/cubits/bloc_observer/bloc_observer.dart';
+import 'firebase_options.dart';
 
 
 void main()async{
@@ -17,6 +19,9 @@ void main()async{
   await LocalData.init();
   await DioHelper.init();
   LocalData.clear();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const FirstProject());
 }
 

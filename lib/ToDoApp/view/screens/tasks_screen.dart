@@ -14,7 +14,7 @@ class TasksScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider.value(
-      value: TodoCubit.get(context)..getAllTasks()..initController()..scrollerListener(),
+      value: TodoCubit.get(context)..getAllTasksFromFireStore()..initController()..scrollerListener(),
       child: Scaffold(
         backgroundColor: Colors.black,
         appBar: AppBar(
@@ -36,7 +36,8 @@ class TasksScreen extends StatelessWidget {
               children: [
                 Expanded(
                   child: Visibility(
-                    visible: cubit.tasksModel?.data?.tasks?.isNotEmpty??true,
+                    visible: cubit.tasksFireList.isNotEmpty,
+                    //visible: cubit.tasksModel?.data?.tasks?.isNotEmpty??true,
                     replacement: const Center(
                       child: Text(
                         'No Tasks Yet, Please Add Some Tasks',
@@ -51,7 +52,8 @@ class TasksScreen extends StatelessWidget {
                       physics: const BouncingScrollPhysics(),
                         itemBuilder: (context, index) =>
                             TasksItemBuilder(
-                              tasks: cubit.tasksModel?.data?.tasks?[index]??Tasks(),
+                              todoFireModel: cubit.tasksFireList[index],
+                             // tasks: cubit.tasksModel?.data?.tasks?[index]??Tasks(),
                               onTap: () {
                                 cubit.changeIndex(index);
                                 Navigator.push(context,
@@ -63,7 +65,8 @@ class TasksScreen extends StatelessWidget {
                             ),
                         separatorBuilder: (context, index) =>
                         const SizedBox(height: 15,),
-                        itemCount: cubit.tasksModel?.data?.tasks?.length??0
+                       // itemCount: cubit.tasksModel?.data?.tasks?.length??0
+                       itemCount: cubit.tasksFireList.length,
                     ),
                   ),
                 ),

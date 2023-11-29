@@ -1,12 +1,17 @@
+import 'package:eraasoft_first_project/ToDoApp/models/todo_fire_model.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/todo_model.dart';
 import '../screens/edit_task_screen.dart';
 
 class TasksItemBuilder extends StatelessWidget {
-  final Tasks tasks;
+  //with api
+  //final Tasks tasks;
+  final TodoFireModel todoFireModel;
   final void Function() onTap;
-  const TasksItemBuilder({Key? key, required this.onTap, required this.tasks, }) : super(key: key);
+  const TasksItemBuilder({Key? key, required this.onTap,
+    //required this.tasks,
+    required this.todoFireModel, }) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -26,7 +31,8 @@ class TasksItemBuilder extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-             tasks.title??'',
+              todoFireModel.title??'',
+             //tasks.title??'',
               style: const TextStyle(
                 color: Colors.amber,
                 fontSize: 18
@@ -34,7 +40,8 @@ class TasksItemBuilder extends StatelessWidget {
             ),
             const SizedBox(height: 5,),
             Text(
-              tasks.description??'',
+              //tasks.description??'',
+              todoFireModel.description??'',
               style: const TextStyle(
                   color: Colors.amber,
                   fontSize: 18
@@ -42,22 +49,24 @@ class TasksItemBuilder extends StatelessWidget {
             ),
             const SizedBox(height: 5,),
             Text(
-              tasks.startDate??'',
+              todoFireModel.startDate??'',
+             // tasks.startDate??'',
               style: const TextStyle(
                   color: Colors.grey,
               ),
             ),
             const SizedBox(height: 5,),
             Text(
-              tasks.endDate??'',
+              todoFireModel.endDate??'',
+              //tasks.endDate??'',
               style: const TextStyle(
                   color: Colors.grey,
               ),
             ),
             const SizedBox(height: 5,),
-            Visibility(
-              visible: (tasks.image??'').isNotEmpty,
-                child: Image.network(tasks.image??'')),
+            // Visibility(
+            //   visible: (tasks.image??'').isNotEmpty,
+            //     child: Image.network(tasks.image??'')),
 
           ],
         ),

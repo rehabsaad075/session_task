@@ -149,7 +149,7 @@ class AddNewTaskScreen extends StatelessWidget {
                   ElevatedButtonCustom(
                     onPressed: () {
                       if (cubit.formKey.currentState!.validate()){
-                        cubit.storeNewTask().then((value) => {
+                        cubit.addTaskWithFireStore().then((value) => {
                           showToast(msg: 'Added successfully'),
                         //cubit.removeTask(),
                           Navigator.pop(context)
