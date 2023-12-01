@@ -17,7 +17,6 @@ class EditTaskScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     TodoCubit cubit=TodoCubit.get(context);
-
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
@@ -34,163 +33,163 @@ class EditTaskScreen extends StatelessWidget {
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20,vertical:15),
-        child: Form(
-          key: cubit.formKey,
-          child: Column(
-              children:[
-                Expanded(
-                  child: SingleChildScrollView(
-                    physics: const BouncingScrollPhysics(),
-                    child: Column(
-                      children: [
-                        TextFormFieldCustom(
-                          keyboardType: TextInputType.text,
-                          labelText: 'Title',
-                          controller: cubit.titleController,
-                          icon: Icons.home,
-                        ),
-                        const SizedBox(
-                          height: 15,
-                        ),
-                        TextFormFieldCustom(
-                          keyboardType: TextInputType.text,
-                          labelText: 'Description',
-                          icon: Icons.edit,
-                          controller: cubit.descriptionController,
-                        ),
-                        const SizedBox(
-                          height: 15,
-                        ),
-                        TextFormFieldCustom(
-                          keyboardType: TextInputType.none,
-                          labelText: 'startDate',
-                          icon: Icons.date_range,
-                          onTap: () async {
-                            DateTime? datePicker=await showDatePicker(
-                              context: context,
-                              initialDate: DateTime.now(),
-                              firstDate: DateTime.now(),
-                              lastDate: DateTime.now().add(const Duration(days: 365*5)),
-                            );
-                            if (datePicker != null){
-                              cubit.startDateController.text=
-                              "${datePicker.year}-${datePicker.month}-${datePicker.day}";
-                            }
-                          },
-                          controller: cubit.startDateController,
-                        ),
-                        const SizedBox(
-                          height: 15,
-                        ),
-                        TextFormFieldCustom(
-                          keyboardType: TextInputType.none,
-                          labelText: 'lastDate',
-                          icon: Icons.date_range_rounded,
-                          onTap: () async {
-                            DateTime? lastDatePicker=await showDatePicker(
-                              context: context,
-                              initialDate: DateTime.now(),
-                              firstDate: DateTime.now(),
-                              lastDate: DateTime.now().add(const Duration(days: 365*5)),
-                            );
-                            if (lastDatePicker != null){
-                              cubit.lastDateController.text=
-                              "${lastDatePicker.year}-${lastDatePicker.month}-${lastDatePicker.day}";
-                            }
-                          },
-                          controller: cubit.lastDateController,
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        BlocBuilder<TodoCubit, TodoState>(
-                          builder: (context, state) {
-                            TodoCubit cubit =TodoCubit.get(context);
-                            return InkWell(
-                              onTap: (){
-                                cubit.takePhotoFromUser();
-                              },
-                              borderRadius: BorderRadius.circular(15),
-                              child: Container(
-                                padding: const EdgeInsets.all(10),
-                                width: double.infinity,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(15),
-                                    border: Border.all(
-                                        color: Colors.grey
-                                    )
-                                ),
-                                child: Visibility(
-                                  visible: cubit.image==null,
-                                  replacement: Image.file(File(cubit.image?.path??'')),
-                                  child:  Column(
-                                    children: [
-                                      if((cubit.tasksModel?.data?.tasks?[cubit.currentIndex].image??'').isNotEmpty)
-                                      Image.network(cubit.tasksModel?.data?.tasks?[cubit.currentIndex].image??''),
-                                      if((cubit.tasksModel?.data?.tasks?[cubit.currentIndex].image??'').isEmpty)...[
-                                        const Icon(
-                                          Icons.image,
-                                          size: 200,
-                                          color: Colors.amber,
+      padding: const EdgeInsets.symmetric(horizontal: 20,vertical:15),
+      child: Form(
+        key: cubit.formKey,
+        child: Column(
+            children:[
+              Expanded(
+                child: SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  child: Column(
+                    children: [
+                      TextFormFieldCustom(
+                        keyboardType: TextInputType.text,
+                        labelText: 'Title',
+                        controller: cubit.titleController,
+                        icon: Icons.home,
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      TextFormFieldCustom(
+                        keyboardType: TextInputType.text,
+                        labelText: 'Description',
+                        icon: Icons.edit,
+                        controller: cubit.descriptionController,
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      TextFormFieldCustom(
+                        keyboardType: TextInputType.none,
+                        labelText: 'startDate',
+                        icon: Icons.date_range,
+                        onTap: () async {
+                          DateTime? datePicker=await showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime.now(),
+                            lastDate: DateTime.now().add(const Duration(days: 365*5)),
+                          );
+                          if (datePicker != null){
+                            cubit.startDateController.text=
+                            "${datePicker.year}-${datePicker.month}-${datePicker.day}";
+                          }
+                        },
+                        controller: cubit.startDateController,
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      TextFormFieldCustom(
+                        keyboardType: TextInputType.none,
+                        labelText: 'lastDate',
+                        icon: Icons.date_range_rounded,
+                        onTap: () async {
+                          DateTime? lastDatePicker=await showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime.now(),
+                            lastDate: DateTime.now().add(const Duration(days: 365*5)),
+                          );
+                          if (lastDatePicker != null){
+                            cubit.lastDateController.text=
+                            "${lastDatePicker.year}-${lastDatePicker.month}-${lastDatePicker.day}";
+                          }
+                        },
+                        controller: cubit.lastDateController,
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      BlocBuilder<TodoCubit, TodoState>(
+                        builder: (context, state) {
+                          TodoCubit cubit =TodoCubit.get(context);
+                          return InkWell(
+                            onTap: (){
+                              cubit.takePhotoFromUser();
+                            },
+                            borderRadius: BorderRadius.circular(15),
+                            child: Container(
+                              padding: const EdgeInsets.all(10),
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(15),
+                                  border: Border.all(
+                                      color: Colors.grey
+                                  )
+                              ),
+                              child: Visibility(
+                                visible: cubit.image==null,
+                                replacement: Image.file(File(cubit.image?.path??'')),
+                                child:  Column(
+                                  children: [
+                                    if((cubit.tasksModel?.data?.tasks?[cubit.currentIndex].image??'').isNotEmpty)
+                                    Image.network(cubit.tasksModel?.data?.tasks?[cubit.currentIndex].image??''),
+                                    if((cubit.tasksModel?.data?.tasks?[cubit.currentIndex].image??'').isEmpty)...[
+                                      const Icon(
+                                        Icons.image,
+                                        size: 200,
+                                        color: Colors.amber,
+                                      ),
+                                      const Text(
+                                        'add a photo',
+                                        style: TextStyle(
+                                            color: Colors.amber,
+                                            fontSize: 30
                                         ),
-                                        const Text(
-                                          'add a photo',
-                                          style: TextStyle(
-                                              color: Colors.amber,
-                                              fontSize: 30
-                                          ),
-                                        )
-                                      ]
-                                    ],
-                                  ),
+                                      )
+                                    ]
+                                  ],
                                 ),
                               ),
-                            );
-                          },
-                        ),
-                         const SizedBox(
-                          height: 15,
-                        ),
-                      ],
-                    ),
+                            ),
+                          );
+                        },
+                      ),
+                       const SizedBox(
+                        height: 15,
+                      ),
+                    ],
                   ),
                 ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: ElevatedButtonCustom(
-                        onPressed: () {
-                          if(cubit.formKey.currentState!.validate()){
-                            cubit.updateTask().then((value) => {
-                              showToast(msg: 'updated successfully'),
-                              Navigator.pop(context)
-                            });
-                          }
-                        },
-                        text: 'Edit the Task',
-                      ),
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    child: ElevatedButtonCustom(
+                      onPressed: () {
+                        if(cubit.formKey.currentState!.validate()){
+                          cubit.updateTaskWithFirebase().then((value) => {
+                            showToast(msg: 'updated successfully'),
+                            Navigator.pop(context)
+                          });
+                        }
+                      },
+                      text: 'Edit the Task',
                     ),
-                    const SizedBox(width: 10,),
-                    Expanded(
-                      child: ElevatedButtonCustom(
-                        onPressed: () {
-                          if(cubit.formKey.currentState!.validate()){
-                            cubit.delete().then((value) => {
-                              showToast(msg: 'deleted successfully'),
-                              Navigator.pop(context)
-                            });
-                          }
-                        },
-                        text: 'Delete the Task',
-                      ),
+                  ),
+                  const SizedBox(width: 10,),
+                  Expanded(
+                    child: ElevatedButtonCustom(
+                      onPressed: () {
+                        if(cubit.formKey.currentState!.validate()){
+                          cubit.deleteTaskWithFirebase().then((value) => {
+                            showToast(msg: 'deleted successfully'),
+                            Navigator.pop(context)
+                          });
+                        }
+                      },
+                      text: 'Delete the Task',
                     ),
-                  ],
-                )
+                  ),
+                ],
+              )
 
-              ]
-          ),
+            ]
         ),
+      ),
       ) ,
 
     );

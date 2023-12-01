@@ -6,7 +6,8 @@ import '../screens/edit_task_screen.dart';
 
 class TasksItemBuilder extends StatelessWidget {
   //with api
-  //final Tasks tasks;
+ // final Tasks tasks;
+  //with firebase
   final TodoFireModel todoFireModel;
   final void Function() onTap;
   const TasksItemBuilder({Key? key, required this.onTap,
@@ -68,6 +69,10 @@ class TasksItemBuilder extends StatelessWidget {
             //   visible: (tasks.image??'').isNotEmpty,
             //     child: Image.network(tasks.image??'')),
 
+            if((todoFireModel.image??'').isNotEmpty)
+            ...[
+              Image.network(todoFireModel.image??'')
+            ]
           ],
         ),
       ),

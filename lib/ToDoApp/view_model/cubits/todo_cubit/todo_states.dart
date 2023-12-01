@@ -37,3 +37,7 @@ class ShowStatisticsErrorState extends TodoState{}
 class GetMoreTasksLoadingState extends TodoState{}
 class GetMoreTasksSuccessState extends TodoState{}
 class GetMoreTasksErrorState extends TodoState{}
+
+class GetTasksFromFireStoreLoadingState extends TodoState{}
+class GetTasksFromFireStoreSuccessState extends TodoState{}
+class GetTasksFromFireStoreErrorState extends TodoState{}

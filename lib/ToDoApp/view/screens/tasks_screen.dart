@@ -55,7 +55,10 @@ class TasksScreen extends StatelessWidget {
                               todoFireModel: cubit.tasksFireList[index],
                              // tasks: cubit.tasksModel?.data?.tasks?[index]??Tasks(),
                               onTap: () {
-                                cubit.changeIndex(index);
+                                // with api
+                                //cubit.changeIndex(index);
+                                // with firebase
+                                cubit.setDateFromFirebaseToControllers(index);
                                 Navigator.push(context,
                                     MaterialPageRoute(builder: (context) =>
                                         EditTaskScreen(index: index,)

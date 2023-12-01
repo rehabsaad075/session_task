@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
 import 'package:eraasoft_first_project/ToDoApp/models/statistics_model.dart';
@@ -7,6 +9,7 @@ import 'package:eraasoft_first_project/ToDoApp/view_model/data/loacl/shared_keys
 import 'package:eraasoft_first_project/ToDoApp/view_model/data/loacl/shared_preferences.dart';
 import 'package:eraasoft_first_project/ToDoApp/view_model/data/network/diohelper.dart';
 import 'package:eraasoft_first_project/ToDoApp/view_model/data/network/endPoints.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
@@ -261,6 +264,21 @@ class TodoCubit extends Cubit<TodoState> {
 
   Future<void>addTaskWithFireStore()async {
     emit(StoreNewTaskLoadingState());
+    TodoFireModel todoFire=TodoFireModel(
+      title:titleController.text,
+      endDate:lastDateController.text,
+      startDate:startDateController.text,
+      description:descriptionController.text,
+      userId:LocalData.get(key: SharedKeys.uid),
+      status:'new',
+    );
+    String ?link;
+    if (image !=null) {
+      await uploadImage(image: image!, onSuccess: (photoLink) {
+        link = photoLink;
+      });
+    }
+    todoFire.image=link;
     await FirebaseFirestore.instance.collection(FirebaseKeys.tasks).
     add({
       "title":titleController.text,
@@ -288,11 +306,78 @@ class TodoCubit extends Cubit<TodoState> {
         .then((value) {
           tasksFireList=[];
           for(var i in value.docs){
-            tasksFireList.add(TodoFireModel.fromFireStore(i.data(),id: i.id));
+            tasksFireList.add(TodoFireModel.fromFireStore(i.data(),id: i.reference));
           }
           emit(GetAllTasksSuccessState());
     }).catchError((error){
       emit(GetAllTasksErrorState());
+    });
+  }
+
+
+TodoFireModel ?currentTask;
+  Future<void>getTaskFromFireStore()async{
+    emit(GetTasksFromFireStoreLoadingState());
+    await tasksFireList[currentIndex].id?.get()
+    .then((value){
+      currentTask=TodoFireModel.fromFireStore(value.data()as Map<String,dynamic>, id:value.reference ) ;
+      emit(GetTasksFromFireStoreSuccessState());
+    }).catchError((error){
+      emit(GetTasksFromFireStoreErrorState());
+      throw error;
+    });
+  }
+
+  void setDateFromFirebaseToControllers(int index){
+    currentIndex=index;
+    titleController.text=tasksFireList[currentIndex].title??'';
+    descriptionController.text=tasksFireList[currentIndex].description??'';
+    startDateController.text=tasksFireList[currentIndex].startDate??'';
+    lastDateController.text=tasksFireList[currentIndex].endDate??'';
+  }
+
+  void setDateFromControllersToFirebase(){
+  currentTask?.title= titleController.text;
+  currentTask?.description= descriptionController.text;
+  currentTask?.startDate=startDateController.text;
+  currentTask?.endDate=lastDateController.text;
+  }
+
+
+  Future<void>updateTaskWithFirebase()async{
+    emit(UpdateTaskLoadingState());
+    setDateFromControllersToFirebase();
+   await currentTask?.id?.update(currentTask?.toFireStore()??{})
+    .then((value) {
+      emit(UpdateTaskSuccessState());
+      getAllTasksFromFireStore();
+   }).catchError((error){
+     emit(UpdateTaskErrorState());
+     throw error;
+   });
+  }
+
+  Future<void>deleteTaskWithFirebase()async{
+    emit(DeleteTaskLoadingState());
+    setDateFromControllersToFirebase();
+    await currentTask?.id?.delete()
+    .then((value) {
+      emit(DeleteTaskSuccessState());
+      getAllTasksFromFireStore();
+    }).catchError((error){
+      emit(DeleteTaskErrorState());
+      throw error;
+    });
+  }
+
+  Future<void>uploadImage({required XFile image,required Function(String value)onSuccess})async{
+    emit(UploadImageLoadingState());
+  await FirebaseStorage.instance.ref().child('tasks/${image.name}').putFile(File(image.path))
+      .then((photo) async {
+      await photo.ref.getDownloadURL().then((value) {
+         onSuccess(value);
+         emit(UploadImageSuccessState());
+       });
     });
   }
 }
